@@ -15,19 +15,19 @@
 
 
 function main() {
-  // Replace with your the campaigns names and the target budgets
+  // Define the campaigns and their target budgets
   var campaignBudgets = {
     "Campaign 1": 300,
     "Campaign 2": 500,
     "Campaign 3": 700
-    // Add more campaigns here if needed
+    // Add more campaigns here if necessary
   };
 
-  // Iterate over each campaign and adjust the budget
+  // Iterate over all campaigns in the dictionary
   for (var campaignName in campaignBudgets) {
     var targetBudget = campaignBudgets[campaignName];
     var campaign = getCampaignByName(campaignName);
-    
+
     if (campaign) {
       increaseBudget(campaign, targetBudget);
     } else {
@@ -36,7 +36,7 @@ function main() {
   }
 }
 
-// This function fetches the campaign by name
+// Fetches the campaign by name
 function getCampaignByName(campaignName) {
   var campaignIterator = AdsApp.campaigns()
     .withCondition("Name = '" + campaignName + "'")
@@ -49,7 +49,7 @@ function getCampaignByName(campaignName) {
   }
 }
 
-// This function increases the campaign budget by 15% every 4 days, up to the target budget
+// Increases the campaign budget by 15% every 4 days, up to the target budget
 function increaseBudget(campaign, targetBudget) {
   var currentBudget = campaign.getBudget().getAmount();
   
@@ -60,12 +60,12 @@ function increaseBudget(campaign, targetBudget) {
 
   var newBudget = currentBudget * 1.15; // Add 15% to the current budget
   
-  // Ensure the new budget doesn't exceed the target budget
+  // Make sure the new budget doesn't exceed the target budget
   if (newBudget > targetBudget) {
     newBudget = targetBudget;
   }
 
-  // Calculate the number of days since the last increase
+  // Calculate the days since last increase
   var lastIncrease = getLastIncreaseDate(campaign);
   var daysSinceLastIncrease = (new Date() - lastIncrease) / (1000 * 60 * 60 * 24);
 
@@ -74,51 +74,56 @@ function increaseBudget(campaign, targetBudget) {
     Logger.log("Increasing budget for campaign '" + campaign.getName() + "'. New budget: " + newBudget);
     campaign.getBudget().setAmount(newBudget);
     storeLastIncreaseDate(campaign);
-    logBudgetIncrease(campaign.getName(), newBudget);
+    
+    // Log to Google Sheet
+    logToGoogleSheet(campaign.getName(), currentBudget, newBudget);
   } else {
     Logger.log("Less than 4 days since the last budget increase. Skipping update.");
   }
 }
 
-// This function stores the last increase date using labels
+// Stores the last increase date using labels
 function storeLastIncreaseDate(campaign) {
-  var labelName = "Last Increase Date " + new Date().toISOString().split('T')[0]; // Include the date in the label name
+  var labelName = "Last Increase Date " + new Date().toISOString().split('T')[0]; // Append today's date to the label name
 
+  // Apply the label with the current date as part of the name
   if (!AdsApp.labels().withCondition("Name = '" + labelName + "'").get().hasNext()) {
     AdsApp.createLabel(labelName);
   }
-
   campaign.applyLabel(labelName);
 }
 
-// This function gets the last increase date from the labels
+// Retrieves the last increase date from the labels
 function getLastIncreaseDate(campaign) {
-  var labelIterator = campaign.labels()
-    .withCondition("Name CONTAINS 'Last Increase Date'")
-    .get();
+  var labelIterator = campaign.labels().get();
+  var latestDate = new Date(0); // Set to the earliest possible date
 
-  if (labelIterator.hasNext()) {
+  while (labelIterator.hasNext()) {
     var label = labelIterator.next();
-    var labelDate = label.getName().split('Last Increase Date ')[1]; // Extract the date from the label name
-    return new Date(labelDate); // Convert to Date object
-  } else {
-    return new Date(0); // If no label exists, return the earliest possible date
+    if (label.getName().startsWith("Last Increase Date ")) {
+      var labelDate = new Date(label.getName().replace("Last Increase Date ", ""));
+      if (labelDate > latestDate) {
+        latestDate = labelDate;
+      }
+    }
   }
+  return latestDate;
 }
 
-// This function logs the budget increase to a Google Sheets file
-function logBudgetIncrease(campaignName, newBudget) {
-  var spreadsheetUrl = "YOUR_SPREADSHEET_URL"; // Replace with your Google Sheets URL
-  var sheetName = "Budget Increases"; // Replace with your desired sheet name
-
-  var spreadsheet = SpreadsheetApp.openByUrl(spreadsheetUrl);
-  var sheet = spreadsheet.getSheetByName(sheetName);
-
-  if (!sheet) {
-    sheet = spreadsheet.insertSheet(sheetName);
-    sheet.appendRow(["Date", "Campaign Name", "New Budget"]);
+// Logs the budget changes to a Google Sheet and adds a header if it doesn't exist
+function logToGoogleSheet(campaignName, oldBudget, newBudget) {
+  var sheetUrl = "YOUR_SHEET_URL_HERE"; // Replace with your Google Sheets URL
+  var spreadsheet = SpreadsheetApp.openByUrl(sheetUrl);
+  var sheet = spreadsheet.getActiveSheet();
+  
+  // Check if the sheet is empty, if so, add a header row
+  if (sheet.getLastRow() == 0) {
+    sheet.appendRow(["Date", "Campaign Name", "Old Budget", "New Budget"]); // Add the header row
   }
-
-  var currentDate = new Date();
-  sheet.appendRow([currentDate, campaignName, newBudget]);
+  
+  // Get today's date in a readable format (YYYY-MM-DD)
+  var today = new Date().toISOString().split('T')[0];
+  
+  // Append a new row to the sheet with the campaign name, old and new budget, and the date
+  sheet.appendRow([today, campaignName, oldBudget, newBudget]);
 }
