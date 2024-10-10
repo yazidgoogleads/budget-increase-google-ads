@@ -7,3 +7,16 @@ Automated Budget Scaling: Gradually increases budgets without disrupting campaig
 Customizable Target Budgets: Set individual target budgets for each campaign to ensure they do not exceed the specified limit.
 Multi-Campaign Management: Manage and adjust budgets for multiple campaigns in a single run.
 Logging & Tracking: Records all budget changes in Google Sheets, providing a clear overview of spending adjustments.
+
+
+Here are the variables 👇 that you can change to adapt the script to your accounts:
+
+→ Campaign names and target budgets (starting from line 21)
+
+→ Percentage increase if you want to change from 15% to 20%, for example (line 62)
+
+→ Add the Google Sheets link for your tracking file (line 116)
+
+→ Change from 4 to 5 days, for example (lines 74 & 82)
+
+→ Set the script execution frequency to Daily (in the scripts page)
