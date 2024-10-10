@@ -9,7 +9,7 @@ Multi-Campaign Management: Manage and adjust budgets for multiple campaigns in a
 Logging & Tracking: Records all budget changes in Google Sheets, providing a clear overview of spending adjustments.
 
 
-Here are the variables 👇 that you can change to adapt the script to your accounts:
+Here are the variables 👇 that you can change to adapt the script to your accounts ( once you paste scripts in google ads ):
 
 → Campaign names and target budgets (starting from line 21)
 
