@@ -1,28 +1,33 @@
-Version 2 : 
+**Version 2 : **
 
 This Google Ads script automates the budget adjustment process for active campaigns labeled with "auto-adjust budget." The key features of this script include:
 
-- Performance Monitoring: 
+**- Performance Monitoring: **
 
 It evaluates the average cost per conversion over the last 7 days using the "Conversions by Conversion Time" metric.
-Dynamic Budget Adjustment: If the average cost per conversion is below the specified target, the script increases the daily budget by a calculated percentage (e.g., 15%) while ensuring that the new budget does not exceed a predetermined maximum budget limit.
 
-- Logging: 
+- **Dynamic Budget Adjustment**: If the average cost per conversion is below the specified target, the script increases the daily budget :
+  
+    - 10% Budget Increase: If the average cost per conversion is close to but still under the target, the script will apply a more conservative 10% budget increase to avoid overspending while still capitalizing on good performance.
+
+    -  20% Budget Increase: If the average cost per conversion is significantly lower than the target, indicating strong performance, the script will apply a more aggressive 20% increase to maximize potential gains while the campaign is performing efficiently. by a calculated percentage (e.g., 15%) while ensuring that the new budget does not exceed a predetermined maximum budget limit.
+
+- ** Logging: **
 
 All budget changes are recorded in a Google Sheet for historical reference, providing transparency and accountability for budget adjustments.
 
-- Campaign Label Update:
+**- Campaign Label Update:**
 
 The script updates the campaign label with the date of the last budget change, ensuring that users can track when adjustments were made.
 This script is designed to optimize ad performance while maintaining budgetary constraints, ultimately enhancing the effectiveness of advertising campaigns.
 
-Lines to Customize:
+**Lines to Customize:**
 
 1. Campaign Names and Budgets: Modify in the campaignBudgets variable (starting at line 20).
 
 2. Target Cost per Conversion: Adjust the targetCostPerConversion on line 27.
 
-3. Google Sheets URL: Replace "PUT_YOUR_GOOGLE_SHEET_URL_HERE" with your actual Google Sheets URL on line 304.
+3. Google Sheets URL: Replace "PUT_YOUR_GOOGLE_SHEET_URL_HERE" with your actual Google Sheets URL on line 30.
 
 4. Email Alert: Update your email address in the sendAlertEmail function on line 113.
 
