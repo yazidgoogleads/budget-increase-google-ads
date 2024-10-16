@@ -16,7 +16,7 @@ It evaluates the average cost per conversion over the last 7 days using the "Con
 
 All budget changes are recorded in a Google Sheet for historical reference, providing transparency and accountability for budget adjustments.
 
-**- Campaign Label Update:**
+- **Campaign Label update** :
 
 The script updates the campaign label with the date of the last budget change, ensuring that users can track when adjustments were made.
 This script is designed to optimize ad performance while maintaining budgetary constraints, ultimately enhancing the effectiveness of advertising campaigns.
