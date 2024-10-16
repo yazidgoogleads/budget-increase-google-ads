@@ -2,7 +2,7 @@
 
 This Google Ads script automates the budget adjustment process for active campaigns labeled with "auto-adjust budget." The key features of this script include:
 
-**- Performance Monitoring: **
+- **Performance monitoring**
 
 It evaluates the average cost per conversion over the last 7 days using the "Conversions by Conversion Time" metric.
 
@@ -12,7 +12,7 @@ It evaluates the average cost per conversion over the last 7 days using the "Con
 
     -  20% Budget Increase: If the average cost per conversion is significantly lower than the target, indicating strong performance, the script will apply a more aggressive 20% increase to maximize potential gains while the campaign is performing efficiently. by a calculated percentage (e.g., 15%) while ensuring that the new budget does not exceed a predetermined maximum budget limit.
 
-- ** Logging: **
+- **Logging**
 
 All budget changes are recorded in a Google Sheet for historical reference, providing transparency and accountability for budget adjustments.
 
