@@ -1,3 +1,25 @@
+Version 2 : 
+
+This Google Ads script automates the budget adjustment process for active campaigns labeled with "auto-adjust budget." The key features of this script include:
+
+Performance Monitoring: It evaluates the average cost per conversion over the last 7 days using the "Conversions by Conversion Time" metric.
+Dynamic Budget Adjustment: If the average cost per conversion is below the specified target, the script increases the daily budget by a calculated percentage (e.g., 15%) while ensuring that the new budget does not exceed a predetermined maximum budget limit.
+Logging: All budget changes are recorded in a Google Sheet for historical reference, providing transparency and accountability for budget adjustments.
+Campaign Label Update: The script updates the campaign label with the date of the last budget change, ensuring that users can track when adjustments were made.
+This script is designed to optimize ad performance while maintaining budgetary constraints, ultimately enhancing the effectiveness of advertising campaigns.
+
+Lines to Customize:
+
+1. Campaign Names and Budgets: Modify in the campaignBudgets variable (starting at line 4).
+
+2. Target Cost per Conversion: Adjust the targetCostPerConversion on line 11.
+
+3. Google Sheets URL: Replace "PUT_YOUR_GOOGLE_SHEET_URL_HERE" with your actual Google Sheets URL on line 14.
+
+4. Email Alert: Update your email address in the sendAlertEmail function on line 97.
+
+-------------------------------
+Version 1 : 
 This Google Ads script automates budget management by incrementally increasing the daily budget for selected campaigns over time. It ensures the budget is gradually adjusted every 4 days by 15%, helping to scale ad spend without triggering a new learning phase for the campaign. Additionally, the script allows users to set a maximum target budget for each campaign, ensuring the budget doesn’t exceed the desired limit.
 
 The script also tracks each budget increase using Google Sheets for logging, and labels campaigns with the date of the last budget increase.
