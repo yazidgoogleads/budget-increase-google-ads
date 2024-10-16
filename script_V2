@@ -17,7 +17,7 @@
 function main() {
   // Campaign budget limits
   var campaignBudgets = {
-    "Campaign 1": 300,
+    "YAZ - 30 Sept - Appels": 300,
     "Campaign 2": 500,
     "Campaign 3": 700
     // Add more campaigns as needed
@@ -27,7 +27,7 @@ function main() {
   var targetCostPerConversion = 120.0; // Example target
 
   // URL of the Google Sheet
-  var spreadsheetUrl = "https://docs.google.com/spreadsheets/d/1Fr4Sw9YExws8AWzJ814lloZucq9QP25pI5DL6UxKpao/edit?gid=0#gid=0"; // Change to your Google Sheets URL
+  var spreadsheetUrl = "PUT_YOUR_GOOGLE_SHEET_URL_HERE"; // Change to your Google Sheets URL
   var sheetName = "Budget Changes"; // Sheet name in the Google Sheets file
 
   // Get the current date
@@ -125,7 +125,7 @@ function updateCampaignLabel(campaign, changeDate) {
 
 // Function to send an email alert when the cost per conversion exceeds the target
 function sendAlertEmail(campaignName, costPerConversion) {
-  var email = "benhlalyazid@gmail.com"; // Change to your email
+  var email = "your-email@example.com"; // Change to your email
   var subject = "Alert: Budget increase skipped for campaign " + campaignName;
   var body = "The cost per conversion (" + costPerConversion.toFixed(2) + ") exceeded the target. The budget increase was skipped.";
   
