@@ -10,7 +10,7 @@ It evaluates the average cost per conversion over the last 7 days using the "Con
   
     - 10% Budget Increase: If the average cost per conversion is close to but still under the target, the script will apply a more conservative 10% budget increase to avoid overspending while still capitalizing on good performance.
 
-    -  20% Budget Increase: If the average cost per conversion is significantly lower than the target, indicating strong performance, the script will apply a more aggressive 20% increase to maximize potential gains while the campaign is performing efficiently. by a calculated percentage (e.g., 15%) while ensuring that the new budget does not exceed a predetermined maximum budget limit.
+    -  20% Budget Increase: If the average cost per conversion is significantly lower than the target, indicating strong performance, the script will apply a more aggressive 20% increase to maximize potential gains while the campaign is performing efficiently.
 
 - **Logging**
 
