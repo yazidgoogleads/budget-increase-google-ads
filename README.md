@@ -10,13 +10,13 @@ This script is designed to optimize ad performance while maintaining budgetary c
 
 Lines to Customize:
 
-1. Campaign Names and Budgets: Modify in the campaignBudgets variable (starting at line 4).
+1. Campaign Names and Budgets: Modify in the campaignBudgets variable (starting at line 20).
 
-2. Target Cost per Conversion: Adjust the targetCostPerConversion on line 11.
+2. Target Cost per Conversion: Adjust the targetCostPerConversion on line 27.
 
-3. Google Sheets URL: Replace "PUT_YOUR_GOOGLE_SHEET_URL_HERE" with your actual Google Sheets URL on line 14.
+3. Google Sheets URL: Replace "PUT_YOUR_GOOGLE_SHEET_URL_HERE" with your actual Google Sheets URL on line 304.
 
-4. Email Alert: Update your email address in the sendAlertEmail function on line 97.
+4. Email Alert: Update your email address in the sendAlertEmail function on line 113.
 
 -------------------------------
 Version 1 : 
