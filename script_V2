@@ -1,0 +1,133 @@
+// Copyright 2024, Benhlal Yazid, All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+
+function main() {
+  // Campaign budget limits
+  var campaignBudgets = {
+    "Campaign 1": 300,
+    "Campaign 2": 500,
+    "Campaign 3": 700
+    // Add more campaigns as needed
+  };
+
+  // Set the target cost per conversion
+  var targetCostPerConversion = 120.0; // Example target
+
+  // URL of the Google Sheet
+  var spreadsheetUrl = "https://docs.google.com/spreadsheets/d/1Fr4Sw9YExws8AWzJ814lloZucq9QP25pI5DL6UxKpao/edit?gid=0#gid=0"; // Change to your Google Sheets URL
+  var sheetName = "Budget Changes"; // Sheet name in the Google Sheets file
+
+  // Get the current date
+  var currentDate = new Date();
+  var formattedDate = Utilities.formatDate(currentDate, AdsApp.currentAccount().getTimeZone(), "yyyy-MM-dd");
+
+  // Get active campaigns
+  var campaignSelector = AdsApp.campaigns()
+    .withCondition("Status = ENABLED")
+    .forDateRange("LAST_7_DAYS");
+
+  var campaigns = campaignSelector.get();
+
+  Logger.log("Starting budget adjustment script...");
+
+  while (campaigns.hasNext()) {
+    var campaign = campaigns.next();
+    var campaignName = campaign.getName();
+    
+    // Check if campaign is in the budget list
+    if (!campaignBudgets.hasOwnProperty(campaignName)) {
+      Logger.log("Skipping campaign: " + campaignName + " (No budget target set).");
+      continue;
+    }
+
+    // Get the current budget and performance stats
+    var currentBudget = campaign.getBudget().getAmount();
+    var stats = campaign.getStatsFor("LAST_7_DAYS");
+    var totalCost = stats.getCost();
+    var conversions = stats.getConversionsByConversionTime(); // Get Conversions by Conversion Time
+    var costPerConversion = conversions ? totalCost / conversions : 0;
+
+    // Determine if the budget can be increased
+    if (costPerConversion > 0 && costPerConversion <= targetCostPerConversion) {
+      var newBudget = currentBudget * 1.15; // 15% increase
+      var targetBudget = campaignBudgets[campaignName];
+
+      // Ensure the new budget does not exceed the target
+      if (newBudget > targetBudget) {
+        newBudget = targetBudget;
+      }
+
+      // Update the campaign budget if it's within limits
+      if (newBudget > currentBudget) {
+        Logger.log("Updating budget for campaign: " + campaignName + ". New Budget: " + newBudget);
+
+        // Set new budget
+        campaign.getBudget().setAmount(newBudget);
+
+        // Log the change in Google Sheet
+        logBudgetChangeToGoogleSheet(spreadsheetUrl, sheetName, campaignName, currentBudget, newBudget, formattedDate);
+
+        // Update the label with the last change date
+        updateCampaignLabel(campaign, formattedDate);
+      }
+    } else {
+      Logger.log("Skipping budget update for campaign: " + campaignName + " (Cost per conversion too high: " + costPerConversion.toFixed(2) + ")");
+      
+      // Send an alert email
+      sendAlertEmail(campaignName, costPerConversion);
+    }
+  }
+
+  Logger.log("Budget adjustment script completed.");
+}
+
+// Function to log the budget changes into Google Sheets
+function logBudgetChangeToGoogleSheet(spreadsheetUrl, sheetName, campaignName, oldBudget, newBudget, changeDate) {
+  var spreadsheet = SpreadsheetApp.openByUrl(spreadsheetUrl);
+  var sheet = spreadsheet.getSheetByName(sheetName);
+
+  // Log format: Date, Campaign Name, Old Budget, New Budget
+  sheet.appendRow([changeDate, campaignName, oldBudget, newBudget]);
+}
+
+// Function to update the campaign label with the last change date
+function updateCampaignLabel(campaign, changeDate) {
+  var labelName = "auto-adjust budget - Last Change: " + changeDate;
+
+  // Check if the campaign already has the label, if so, remove it first
+  var labels = campaign.labels().get();
+  while (labels.hasNext()) {
+    var label = labels.next();
+    if (label.getName().indexOf("auto-adjust budget") !== -1) {
+      campaign.removeLabel(label.getName());
+    }
+  }
+
+  // Add the updated label with the new date
+  if (!AdsApp.labels().withCondition("Name = '" + labelName + "'").get().hasNext()) {
+    AdsApp.createLabel(labelName);
+  }
+  campaign.applyLabel(labelName);
+}
+
+// Function to send an email alert when the cost per conversion exceeds the target
+function sendAlertEmail(campaignName, costPerConversion) {
+  var email = "benhlalyazid@gmail.com"; // Change to your email
+  var subject = "Alert: Budget increase skipped for campaign " + campaignName;
+  var body = "The cost per conversion (" + costPerConversion.toFixed(2) + ") exceeded the target. The budget increase was skipped.";
+  
+  MailApp.sendEmail(email, subject, body);
+}
