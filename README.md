@@ -1,6 +1,6 @@
 **Version 2**
 
-This Google Ads script automates the budget adjustment process for active campaigns labeled with "auto-adjust budget." The key features of this script include:
+This Google Ads script automates the budget adjustment process for active campaigns. It dynamically creates and updates campaign labels to track the last budget change. The key features of this script include:
 
 - **Performance monitoring**
 
